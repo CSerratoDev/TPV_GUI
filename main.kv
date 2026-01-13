@@ -1,0 +1,82 @@
+<TPVRoot>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    # Título y Estado
+    BoxLayout:
+        size_hint_y: 0.1
+        canvas.before:
+            Color:
+                rgba: 0.2, 0.2, 0.2, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "SISTEMA TPV - TIENDA"
+            font_size: '24sp'
+            bold: True
+
+    # Área Principal: Lista de productos
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.7
+        
+        ScrollView:
+            size_hint_x: 0.7
+            GridLayout:
+                id: lista_carrito
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                # Aquí se mostrarán los productos agregados
+                Label:
+                    text: "Esperando escaneo de productos..."
+                    size_hint_y: None
+                    height: 50
+
+        # Panel lateral de Total
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.3
+            padding: 10
+            spacing: 20
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Label:
+                text: "TOTAL"
+                font_size: '20sp'
+            Label:
+                text: "$ 0.00"
+                font_size: '40sp'
+                color: 0, 1, 0, 1
+            Button:
+                text: "COBRAR"
+                background_color: 0, 0.7, 0, 1
+                font_size: '20sp'
+                on_release: root.finalizar_venta()
+            Button:
+                text: "CANCELAR"
+                background_color: 0.8, 0, 0, 1
+                on_release: root.carrito = []
+
+    # Entrada del Escáner (Invisible o pequeña en la parte inferior)
+    BoxLayout:
+        size_hint_y: 0.2
+        orientation: 'vertical'
+        Label:
+            text: "Escanee el código de barras aquí:"
+            halign: 'left'
+        TextInput:
+            id: barcode_input
+            multiline: False
+            focus: True  # Importante: para que el escáner escriba aquí siempre
+            on_text_validate: 
+                root.agregar_producto_por_codigo(self.text)
+                self.text = "" # Limpia el campo para el siguiente producto
+                self.focus = True # Devuelve el foco
