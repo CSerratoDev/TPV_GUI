@@ -2,17 +2,14 @@ import sqlite3
 import os
 
 def inicializar_db():
-    # Aseguramos que la carpeta data exista
     if not os.path.exists('data'):
         os.makedirs('data')
         
-    conn = sqlite3.connect("data/tpv_abarrotes.db")
+    conn = sqlite3.connect("data/tpv.db")
     cursor = conn.cursor()
 
-    # Activar llaves foráneas para integridad
     cursor.execute("PRAGMA foreign_keys = ON;")
 
-    # Tabla Productos
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS productos (
             codigo_barras TEXT PRIMARY KEY,
@@ -23,7 +20,6 @@ def inicializar_db():
         )
     ''')
 
-    # Tabla Ventas Cabecera
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ventas_cabecera (
             id_venta INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +29,6 @@ def inicializar_db():
         )
     ''')
 
-    # Tabla Ventas Detalle
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ventas_detalle (
             id_detalle INTEGER PRIMARY KEY AUTOINCREMENT,
