@@ -1,0 +1,23 @@
+TPV/
+│
+├── main.py                 # Punto de entrada (solo inicia la app)
+├── requirements.txt        # Dependencias
+├── README.md
+├── LICENSE                 #MIT 
+│
+└── app/
+    ├── __init__.py
+    ├── models/            # Lógica pura
+    │   ├── __init__.py
+    │   ├── user_model.py
+    │   └── database.py
+    │
+    ├── views/             # Interfaz gráfica de Kivy
+    │   ├── __init__.py     
+    │   ├── MainRoot.kv     #La vista del main
+    │   ├── LoginRoot.kv    #La vista del login 
+    │
+    ├── controllers/       # Conexión entre Model y View
+        ├── __init__.py
+        ├── main_controller.py
+        └── auth_controller.py

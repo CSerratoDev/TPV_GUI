@@ -1,6 +1,10 @@
 #:import hex kivy.utils.get_color_from_hex
 
 #WidgetsPersonalizados
+<ButtonAccion@Button>
+    background_normal: ''
+    background_color: hex('#DE9116')
+
 <BotonOscuro@Button>:
     background_normal: ''
     background_color: hex('#252525')
@@ -12,13 +16,21 @@
 <TextoOscuro@Label>:
     color: hex('#252525')
 
+<CajaOscura@Label>:
+    canvas.before:
+        Color:
+            rgba: hex('#252525')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 #Root
 <TPVRoot>:
     orientation: 'vertical'
 
     canvas.before:
         Color:
-            rgba: hex('#fff')
+            rgba: hex('#ECF0EF')
         Rectangle:
             pos: self.pos 
             size: self.size
@@ -34,10 +46,15 @@
                 pos: self.pos 
                 size: self.size
 
+        ButtonAccion: 
+            text: '+'
+            size_hint_x: 0.1
+            on_release: root.nueva_compra()
+
         TextoOscuro:
-            size_hint_x: 0.6
+            size_hint_x: 0.5
             id: title_label
-            text: "Sistema para Control de Inventario y Ventas"
+            text: 'Sistema para Control de Inventario y Ventas'
             font_size: '20sp'
             bold: True
 
@@ -73,30 +90,59 @@
 
     # Sidenav y Botones
     BoxLayout:
-        orientation: 'horizontal'
         size_hint_y: 0.7
         
         BoxLayout:
             orientation:'vertical'
-            Button:
-                size_hint_y: 0.1
-                id: buscar_producto
-                text: 'Buscar producto'
-                on_release: root.buscar_producto()
 
+            GridLayout:
+                size_hint_y: 0.08
+                cols: 2
+                rows: 1
+
+                TextInput:
+                    size_hint_y: 0.2
+                    id: buscar_nombre
+                    hint_text: 'Buscar por Nombre del Producto...'
+                    multiline: False
+                    on_text_validate: root.agregar_producto_nombre(self.text)
+                ButtonAccion:
+                    size_hint_x: 0.1
+                    size_hint_y: 0.2
+                    id: buscar_producto
+                    text: 'Buscar'
+                    on_release: root.buscar_producto()
             
-            ScrollView:
-                size_hint_x: 0.7
-                GridLayout:
-                    id: lista_carrito
-                    cols: 1
-                    size_hint_y: None
-                    height: self.minimum_height
-                    # Aquí se mostrarán los productos agregados
-                    TextoOscuro:
-                        text: "Esperando escaneo de productos..."
-                        size_hint_y: None
-                        height: 50    
+            BoxLayout:
+                size_hint_y: 1
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgba: hex('#DDE4E2')
+                    Rectangle:
+                        pos: self.pos 
+                        size: self.size
+                        
+                BoxLayout:
+                    size_hint_y: 0.04
+                    spacing: .5
+                    CajaOscura:
+                        text: '#'
+                        size_hint_x: .1
+                    CajaOscura:
+                        text: 'Articulo'
+                        size_hint_x: .5
+                    CajaOscura:
+                        text: 'Cantidad'
+                        size_hint_x: .1
+                    CajaOscura:
+                        text: 'Precio unitario'
+                        size_hint_x: .15
+                    CajaOscura:
+                        text: 'Precio final'
+                        size_hint_x: .15
+                BoxLayout:
 
         # Panel lateral de Total
         BoxLayout:
@@ -115,6 +161,7 @@
                 text: "TOTAL"
                 font_size: '20sp'
             TextoOscuro:
+                id: total
                 text: "$ 0.00"
                 font_size: '40sp'
 
@@ -158,20 +205,22 @@
                     on_release: root.verificar_precio()                    
 
             Button:
+                id: cobrar
                 text: "COBRAR"
                 background_normal: ''
                 background_color: hex('#1faa75ff')
                 font_size: '20sp'
                 on_release: root.finalizar_venta()
             Button:
+                id: cancelar
                 text: "CANCELAR"
                 background_normal: ''
                 background_color: hex('#D1262F')
                 font_size: '20sp'
-                on_release: root.carrito = []
+                on_release: root.carrito()
     # Footer
     BoxLayout:
-        size_hint_y: 0.1
+        size_hint_y: 0.05
         orientation: 'vertical'
         canvas.before:
             Color:
@@ -181,13 +230,5 @@
                 size: self.size
 
         Label:
-            text: "Digitar Código de Barras (abajo)"
-            halign: 'left'
-        TextInput:
-            id: barcode_input
-            multiline: False
-            focus: True  # Importante: para que el escáner escriba aquí siempre
-            on_text_validate: 
-                root.agregar_producto_por_codigo(self.text)
-                self.text = "" # Limpia el campo para el siguiente producto
-                self.focus = True # Devuelve el foco
+            text: "Created by: cserrato.dev"
+            color: hex('#ffffff')
