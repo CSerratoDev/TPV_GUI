@@ -1,15 +1,7 @@
-import os
-from db_init import inicializar_db
-import kivy
-from kivy.lang import Builder
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty, ListProperty
-from db_manager import buscar_producto_db 
 
-Builder.load_file('TPVRoot.kv')
-
-class TPVRoot(BoxLayout):
+class MainRoot(BoxLayout):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -51,16 +43,6 @@ class TPVRoot(BoxLayout):
     def carrito(self):
         print('Click en cancelar')
     
-
-
 class TPVApp(App):
     def build(self):
-        return TPVRoot()
-
-if __name__ == '__main__':
-    
-    if not os.path.exists("data/tpv.db"):
-        print("Primera ejecución detectada. Configurando...")
-        inicializar_db()
-    
-    TPVApp().run()
+        return MainRoot()
