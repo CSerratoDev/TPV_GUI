@@ -28,9 +28,9 @@ class seed:
 
         # 3. Crear Productos Random
         nombres_productos = [
-            "Coca Cola 600ml", "Pepsi 600ml", "Agua Ciel 1L", "Galletas Marias", 
-            "Sabritas Sal", "Doritos Nacho", "Gansito", "Leche Lala 1L", 
-            "Huevo Kilo", "Tortillas Kilo", "Jabón Zote", "Shampoo Caprice"
+            "Coca Cola", "Pepsi", "Agua Ciel", "Galletas Marias", 
+            "Sabritas Sal", "Doritos Nacho", "Gansito", "Leche Lala", 
+            "Huevo", "Tortillas", "Jabón Zote", "Shampoo Caprice"
         ]
 
         print("Generando productos aleatorios...")

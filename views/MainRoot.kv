@@ -102,8 +102,8 @@
 
                 TextInput:
                     size_hint_y: 0.2
-                    id: buscar_nombre
-                    hint_text: 'Buscar por Nombre del Producto...'
+                    id: buscar_productId
+                    hint_text: 'Click en Agregar por ID. Enter para agregar por Nombre del Producto...'
                     multiline: False
                     on_text_validate: root.agregar_producto_nombre(self.text)
                 ButtonAccion:
@@ -184,7 +184,7 @@
                     text: "Agregar"
                     background_normal: ''
                     background_color: hex('#DE9116')
-                    on_release: root.agregar_producto()
+                    on_release: root.agregar_producto(buscar_productId.text) 
                 BotonProducto:
                     id: editar_producto
                     text: "Editar"
@@ -205,14 +205,14 @@
                     on_release: root.verificar_precio()                    
 
             Button:
-                id: cobrar
+                id: finalizar_venta
                 text: "COBRAR"
                 background_normal: ''
                 background_color: hex('#1faa75ff')
                 font_size: '20sp'
                 on_release: root.finalizar_venta()
             Button:
-                id: cancelar
+                id: carrito
                 text: "CANCELAR"
                 background_normal: ''
                 background_color: hex('#D1262F')

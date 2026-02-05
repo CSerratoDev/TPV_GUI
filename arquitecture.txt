@@ -1,23 +1,26 @@
 TPV/
 │
-├── main.py                 # Punto de entrada (solo inicia la app)
-├── requirements.txt        # Dependencias
-├── README.md
-├── LICENSE                 #MIT 
+├── main.py                     # Punto de entrada (solo inicia la app)
+├── requirements.txt            # Dependencias requeridas para el desarrollo
+├── README.md                   # Instrucciones de instalación del sistema
+├── LICENSE                     # MIT 
 │
 └── app/
     ├── __init__.py
-    ├── models/            # Lógica pura
+    ├── main.py
+    ├── requirements.py
+    ├── seed.py                 #Seed para test de datos
+    ├── models/                 #Lógica pura
     │   ├── __init__.py
     │   ├── user_model.py
-    │   └── database.py
+    │   └── database.py         # Funciones para la conexion SQLite a la base de datos
     │
-    ├── views/             # Interfaz gráfica de Kivy
+    ├── views/                  # Interfaz gráfica de Kivy
     │   ├── __init__.py     
-    │   ├── MainRoot.kv     #La vista del main
-    │   ├── LoginRoot.kv    #La vista del login 
+    │   ├── MainRoot.kv         #La vista del main
+    │   ├── LoginRoot.kv        #La vista del login 
     │
-    ├── controllers/       # Conexión entre Model y View
+    ├── controllers/            # Conexión entre Model y View
         ├── __init__.py
-        ├── main_controller.py
-        └── auth_controller.py
+        ├── main_controller.py  #Ventana principal
+        └── auth_controller.py  #Ventana de validación de sesión
