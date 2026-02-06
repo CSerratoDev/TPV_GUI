@@ -1,32 +1,53 @@
 #:import hex kivy.utils.get_color_from_hex
-
-#WidgetsPersonalizados
-<ButtonAccion@Button>
+<ActionButton@Button>:
     background_normal: ''
     background_color: hex('#DE9116')
 
-<BotonOscuro@Button>:
+<DarkButton@Button>:
     background_normal: ''
     background_color: hex('#252525')
 
-<BotonProducto@Button>:
+<ProductButton@Button>:
     background_normal: ''
     background_color: hex('#435be1ff')
 
-<TextoOscuro@Label>:
+<DarkLabel@Label>:
     color: hex('#252525')
 
-<CajaOscura@Label>:
+<DarkBox@Label>:
     canvas.before:
         Color:
             rgba: hex('#252525')
         Rectangle:
             pos: self.pos
             size: self.size
+    color: (1,1,1,1)
 
-#Root
+<MessagePopup>:
+    title: 'Aviso del sistema'
+    size_hint: None, None
+    size: 400, 200
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            text: root.message
+            text_size: self.width, None
+            halign: 'center'
+            valign: 'middle'
+        Button:
+            text: 'Aceptar'
+            size_hint_y: None
+            height: 50
+            on_release: root.dismiss()
+
 <MainRoot>:
     orientation: 'vertical'
+    search_id: search_product_id
+    search_name: search_product_name
 
     canvas.before:
         Color:
@@ -35,10 +56,8 @@
             pos: self.pos 
             size: self.size
 
-    #Header
     BoxLayout:
         size_hint_y: 0.08
-
         canvas.before:
             Color:
                 rgba: hex('#37E6A3')
@@ -46,178 +65,173 @@
                 pos: self.pos 
                 size: self.size
 
-        ButtonAccion: 
+        ActionButton: 
             text: '+'
             size_hint_x: 0.1
-            on_release: root.nueva_compra()
+            on_release: root.reset()
 
-        TextoOscuro:
+        DarkLabel:
             size_hint_x: 0.5
             id: title_label
             text: 'Sistema para Control de Inventario y Ventas'
-            font_size: '20sp'
+            font_size: '18sp'
             bold: True
 
         GridLayout:
             size_hint_x: 0.2
             rows: 2
             cols: 2
-            TextoOscuro: 
+            DarkLabel: 
                 text: 'Fecha: '
-                font_size: '14sp'
-            TextoOscuro:
-                id: fecha 
-                font_size: '14sp'
-            TextoOscuro:
+                font_size: '12sp'
+            DarkLabel:
+                id: date
+                font_size: '12sp'
+            DarkLabel:
                 text: 'Hora: '
                 color: hex('#252525')
-                font_size: '14sp'
-            TextoOscuro:
-                id: hora
+                font_size: '12sp'
+            DarkLabel:
+                id: time
                 color: hex('#252525')
-                font_size: '14sp'
+                font_size: '12sp'
 
-        BotonOscuro:
-            id: admin_boton
+        DarkButton:
+            id: admin_button
             size_hint_x: 0.1
             text: 'Admin'
             on_release: root.admin()
-        BotonOscuro:
-            id: salir_boton
+        DarkButton:
+            id: exit_button
             size_hint_x: 0.1
             text: 'Salir'
-            on_release: root.salir()
+            on_release: root.exit()
 
-    # Sidenav y Botones
+    # Sidenav and Buttons
     BoxLayout:
-        size_hint_y: 0.7
+        orientation: 'horizontal'
+        size_hint_y: 0.87
         
         BoxLayout:
             orientation:'vertical'
+            padding: 5
+            spacing: 5
 
-            GridLayout:
-                size_hint_y: 0.08
-                cols: 2
-                rows: 1
+            BoxLayout:
+                size_hint_y: 0.1
+                spacing: 5
 
                 TextInput:
-                    size_hint_y: 0.2
-                    id: buscar_productId
-                    hint_text: 'Click en Agregar por ID. Enter para agregar por Nombre del Producto...'
+                    id: search_product_name
+                    hint_text: 'Nombre del producto'
                     multiline: False
-                    on_text_validate: root.agregar_producto_nombre(self.text)
-                ButtonAccion:
-                    size_hint_x: 0.1
-                    size_hint_y: 0.2
-                    id: buscar_producto
+                TextInput:
+                    id: search_product_id
+                    hint_text: 'ID del producto'
+                    multiline: False
+                    size_hint_x: 0.4
+                ActionButton:
                     text: 'Buscar'
-                    on_release: root.buscar_producto()
-            
-            BoxLayout:
-                size_hint_y: 1
-                orientation: 'vertical'
-
-                canvas.before:
-                    Color:
-                        rgba: hex('#DDE4E2')
-                    Rectangle:
-                        pos: self.pos 
-                        size: self.size
-                        
-                BoxLayout:
-                    size_hint_y: 0.04
-                    spacing: .5
-                    CajaOscura:
-                        text: '#'
-                        size_hint_x: .1
-                    CajaOscura:
-                        text: 'Articulo'
-                        size_hint_x: .5
-                    CajaOscura:
-                        text: 'Cantidad'
-                        size_hint_x: .1
-                    CajaOscura:
-                        text: 'Precio unitario'
-                        size_hint_x: .15
-                    CajaOscura:
-                        text: 'Precio final'
-                        size_hint_x: .15
-                BoxLayout:
-
-        # Panel lateral de Total
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_x: 0.25
-            padding: 10
-            spacing: 20
-            canvas.before:
-                Color:
-                    rgba: hex('#ECF0EF')
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+                    size_hint_x: 0.3
+                    on_release: root.add_product(search_product_id.text, search_product_name.text)
                 
-            TextoOscuro:
-                text: "TOTAL"
-                font_size: '20sp'
-            TextoOscuro:
-                id: total
-                text: "$ 0.00"
-                font_size: '40sp'
+            BoxLayout:
+                size_hint_y: 0.05
+                DarkBox:
+                    text: '#'
+                    size_hint_x: .1
+                DarkBox:
+                    text: 'Producto'
+                    size_hint_x: .5
+                DarkBox:
+                    text: 'Cantidad'
+                    size_hint_x: .1
+                DarkBox:
+                    text: 'Precio'
+                    size_hint_x: .15
+                DarkBox:
+                    text: 'Total x Cantidad'
+                    size_hint_x: .15
 
-            # Configuración de Productos
-            GridLayout:
-                size_hint_x: 1
-                rows: 2
-                cols: 2
-                spacing: 4
-                        
+            ScrollView:
+                do_scroll_x: False
                 canvas.before:
                     Color:
-                        rgba: hex('#ffffffff')
+                        rgba: hex('#ECF0EF')
                     Rectangle:
                         pos: self.pos
                         size: self.size
+                GridLayout:
+                    id: cart_container 
+                    cols: 1
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: 2
 
-                BotonProducto:
-                    id: agregar_producto
+                    row_default_height: '36dp'
+                    row_force_default: True
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.3
+            padding: 10
+            spacing: 15
+                
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: 0.3
+                DarkLabel:
+                    text: "TOTAL"
+                    font_size: '18sp'
+                DarkLabel:
+                    id: total_label
+                    text: "$ 0.00"
+                    font_size: '36sp'
+                    bold: True
+
+            # Product Configuration
+            GridLayout:
+                rows: 3
+                cols: 2
+                spacing: 5
+
+                TextInput:
+                    id: edit_price
+                    hint_text: 'Nuevo Precio'
+                    input_filter: 'float'
+                TextInput:
+                    id: edit_quantity
+                    hint_text: 'Cantidad'
+                    input_filter: 'int'
+                ProductButton:
                     text: "Agregar"
-                    background_normal: ''
                     background_color: hex('#DE9116')
-                    on_release: root.agregar_producto(buscar_productId.text) 
-                BotonProducto:
-                    id: editar_producto
+                    on_release: root.add_product(search_product_id.text,search_product_name.text) 
+                ProductButton:
                     text: "Editar"
-                    background_normal: ''
                     background_color: hex('#216dc4ff')
-                    on_release: root.editar_producto()
-                BotonProducto:
-                    id: eliminar_producto
-                    text: "Eliminar"
-                    background_normal: 
+                    on_release: root.update_product(search_product_id.text, edit_price.text, edit_quantity.text)
+                ProductButton:
+                    text: "Borrar"
                     background_color: hex('#F63049')
-                    on_release: root.eliminar_producto()
-                BotonProducto:
-                    id: verificar_precio
-                    text: "Verificar Precio"
-                    background_normal: ''
+                    on_release: root.delete_product()
+                ProductButton:
+                    text: "Consultar"
                     background_color: hex('#0fce19ff')
-                    on_release: root.verificar_precio()                    
+                    on_release: root.check_price()        
 
             Button:
-                id: finalizar_venta
                 text: "COBRAR"
                 background_normal: ''
                 background_color: hex('#1faa75ff')
-                font_size: '20sp'
-                on_release: root.finalizar_venta()
+                font_size: '24sp'
+                bold: True
+                on_release: root.sell()
             Button:
-                id: carrito
-                text: "CANCELAR"
+                text: "CANCEL"
                 background_normal: ''
                 background_color: hex('#D1262F')
-                font_size: '20sp'
-                on_release: root.carrito()
+                on_release: root.reset()
     # Footer
     BoxLayout:
         size_hint_y: 0.05
@@ -228,7 +242,7 @@
             Rectangle:
                 pos: self.pos 
                 size: self.size
-
         Label:
             text: "Created by: cserrato.dev"
+            font_size: '6sp'
             color: hex('#ffffff')

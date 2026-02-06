@@ -2,22 +2,21 @@ import sqlite3
 import os
 
 class Database:
-    
     def __init__(self, db_name="data/tpv.db"):
         self.db_name = db_name
-        self.ensure_directory() #llamando a otra función
-        self.create_tables() #llamando a otra función
+        self.ensure_directory()
+        self.create_tables()
 
-    def ensure_directory(self): #apunta al archivo db_name 
+    def ensure_directory(self):
         directory = os.path.dirname(self.db_name)
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-    def get_connection(self): #trae la conexión SQLite apuntando a la base de datos
+    def get_connection(self):
         return sqlite3.connect(self.db_name)
 
-    def create_tables(self): #crea las tablas en la base de datos
-        with self.get_connection() as conn: #conectando con la base de datos
+    def create_tables(self): 
+        with self.get_connection() as conn:
             cursor = conn.cursor() 
 
             # 1. Tabla Usuarios
@@ -69,62 +68,52 @@ class Database:
             
             conn.commit()
             print("Base de datos inicializada correctamente.")
-
-    def get_productId(self, productId):
+    
+    def get_product(self, product_id=None, product_name=None):
         conn = self.get_connection()
         cursor = conn.cursor()
+
+        p_id = product_id.strip() if product_id else None
+        p_name = f"%{product_name.strip().replace(' ', '')}%" if product_name else ""
+
         try:
-            cursor.execute('''
+            query = '''
                 SELECT productName, price
                 FROM products
                 WHERE productId = ?
-            ''', (productId,))
+                OR REPLACE(productName, ' ', '') LIKE ?
+                '''
 
-            result = cursor.fetchone()
+            cursor.execute(query, (p_id, p_name))
+            results = cursor.fetchall()
 
-            if result:
-                print(f"Producto agregado: {len(result)}")
-                print(result)
-                return result
-            else: 
-                print("Producto no encontrado. Asegurate de ingresar un número valido")
-                print(result)
+            if results:
+                return results
+            else:
                 return []
-            
         except sqlite3.Error as e:
             print(f"Error al buscar producto: {e}")
             return []
         finally:    
             conn.close()
-    
-    def get_productoName(self, productName):
+
+    def put_product(self, product_id, new_price, quantity_sold):
         conn = self.get_connection()
         cursor = conn.cursor()
 
-        productNameFormat = productName.strip().replace(" ", "") #Estoy quitando espacios intermedios
-        param = f"%{productNameFormat}%" #Agregamos un parametro para la busqueda por LIKE
         try:
             cursor.execute('''
-                SELECT productName, price
+                SELECT productName, stock 
                 FROM products
-                WHERE REPLACE(productName, ' ', '') LIKE ?
-            ''', (param,))
+                WHERE productId = ?;
+            ''', (product_id,))
+            product = cursor.fetchone()
 
-            results = cursor.fetchall()
+            if not product:
+                print(f"Error: El producto con ID {product_id} no existe.")
 
-            if results:
-                print(f"Productos encontrados: {len(results)}")
-                for product in results:
-                    print(f"{product[0]} (${product[1]})")
-                return results
-            else:
-                print(f"Producto no encontrado. Asegurate de ingresar un nombre valido")
-                return []
         except sqlite3.Error as e:
-            print(f"Error al buscar producto: {e}")
-            return []
+            print(f"Error al intentar cambiar el producto: {e}")
+            return None
         finally:
             conn.close()
-
-# Instancia global para ser importada (opcional, pero útil en Singleton)
-# db = Database()
