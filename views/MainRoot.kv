@@ -1,7 +1,7 @@
 #:import hex kivy.utils.get_color_from_hex
 <ActionButton@Button>:
     background_normal: ''
-    background_color: hex('#DE9116')
+    background_color: hex('#002649')
 
 <DarkButton@Button>:
     background_normal: ''
@@ -26,7 +26,7 @@
 <MessagePopup>:
     title: 'Aviso del sistema'
     size_hint: None, None
-    size: 400, 200
+    size: 600, 400
     auto_dismiss: False
 
     BoxLayout:
@@ -60,7 +60,7 @@
         size_hint_y: 0.08
         canvas.before:
             Color:
-                rgba: hex('#37E6A3')
+                rgba: hex('#b5d3f4')
             Rectangle:
                 pos: self.pos 
                 size: self.size
@@ -173,10 +173,18 @@
 
         BoxLayout:
             orientation: 'vertical'
+            
+            canvas.before:
+                Color:
+                    rgba: hex('#e1dbdb')
+                Rectangle:
+                    pos: self.pos 
+                    size: self.size
+
             size_hint_x: 0.3
             padding: 10
-            spacing: 15
-                
+            spacing: 15            
+        
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: 0.3
@@ -205,32 +213,32 @@
                     input_filter: 'int'
                 ProductButton:
                     text: "Agregar"
-                    background_color: hex('#DE9116')
+                    background_color: hex('#2485ab')
                     on_release: root.add_product(search_product_id.text,search_product_name.text) 
                 ProductButton:
                     text: "Editar"
-                    background_color: hex('#216dc4ff')
+                    background_color: hex('#2485ab')
                     on_release: root.update_product(search_product_id.text, edit_price.text, edit_quantity.text)
                 ProductButton:
                     text: "Borrar"
-                    background_color: hex('#F63049')
+                    background_color: hex('#2485ab')
                     on_release: root.delete_product()
                 ProductButton:
                     text: "Consultar"
-                    background_color: hex('#0fce19ff')
+                    background_color: hex('#2485ab')
                     on_release: root.check_price()        
 
             Button:
                 text: "COBRAR"
                 background_normal: ''
-                background_color: hex('#1faa75ff')
+                background_color: hex('#0ea269')
                 font_size: '24sp'
                 bold: True
                 on_release: root.sell()
             Button:
                 text: "CANCEL"
                 background_normal: ''
-                background_color: hex('#D1262F')
+                background_color: hex('#f02646')
                 on_release: root.reset()
     # Footer
     BoxLayout:
@@ -244,5 +252,5 @@
                 size: self.size
         Label:
             text: "Created by: cserrato.dev"
-            font_size: '6sp'
+            font_size: '12sp'
             color: hex('#ffffff')

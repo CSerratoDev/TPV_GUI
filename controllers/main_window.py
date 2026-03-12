@@ -12,9 +12,18 @@ class MainRoot(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.db = Database()
+        self.total = 0.0
 
     def reset(self):
-        print("Reset al sistema...")
+        self.ids.cart_container.clear_widgets()
+        
+        self.total_actual = 0.0
+        self.ids.total_label.text = "$ 0.00"
+        
+        self.ids.search_product_id.text = ""
+        self.ids.search_product_name.text = ""
+        
+        self.show_popup("Sistema reiniciado...")
 
     def admin(self):
         print("Admin presionado")
@@ -46,9 +55,13 @@ class MainRoot(BoxLayout):
         print(f"Producto agregado al carrito: {product_name} - Precio: ${price}")
 
         container = self.ids.cart_container
+        total = self.ids.total_label
+
+        self.total += price
+
+        total.text = f"${self.total:.2f}"
 
         row = BoxLayout(size_hint_y=None, height=36, spacing=3)
-
         row.add_widget(Label(text="1", size_hint_x=0.1, color=(0,0,0,1))) # ID temporal
         row.add_widget(Label(text=product_name, size_hint_x=0.5, color=(0,0,0,1)))
         row.add_widget(Label(text="1", size_hint_x=0.1, color=(0,0,0,1))) # Cantidad inicial
@@ -56,8 +69,8 @@ class MainRoot(BoxLayout):
         row.add_widget(Label(text=f"{price:.2f}", size_hint_x=0.15, color=(0,0,0,1)))
     
         container.add_widget(row)
-
         print(f"Producto visual agregado: {product_name}")
+
     def put_product(self, product_id, new_price, quantity_sold):
         if not product_id or not new_price or not quantity_sold:
             print("Faltan datos para editar")
